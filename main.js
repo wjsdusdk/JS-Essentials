@@ -165,3 +165,215 @@ switch (q) {
 }
 
 // 변수가 특정 값으로 딱 떨어지는 조건으로 분기 처리를 한다면 if문 보다 switch문이 적합
+
+/* 9. 반복문 */
+
+const ulEl = document.querySelector("ul");
+
+console.log(ulEl); // <ul></ul>
+
+// for (시작조건; 종료조건; 변화조건) {}
+for (let i = 0; i < 10; i += 1) {
+    console.log(i);
+
+    const li = document.createElement("li");
+
+    li.textContent = `list-${i + 1}`; // textContent : 값을 지정
+
+    if ((i + 1) % 2 === 0) {
+        li.addEventListener("click", function () {
+            console.log(li.textContent); // textContent : 값을 가져옴
+        });
+    }
+
+    ulEl.appendChild(li);
+}
+
+/* 10. 변수 유효범위 */
+
+// let, const : 블록 레벨(가장 가까운 중괄호의 범위)의 유효범위
+
+function scope1() {
+    if (true) {
+        const r = 123;
+        console.log(r);
+    }
+}
+scope1(); // 123
+
+/* function scope2() {
+    if (true) {
+        const r = 123;
+    }
+    console.log(r);
+}
+scope2() // err */
+
+function scope3() {
+    if (true) {
+        console.log(r);
+        const r = 123;
+    }
+}
+scope3(); // undefined
+
+/* function scope4() {
+    console.log(r);
+    if (true) {
+        const r = 123;
+    }
+}
+scope4() // err */
+
+// var : 함수 레벨(function 중괄호의 범위)의 유효범위
+
+function scope5() {
+    console.log(r);
+    if (true) {
+        var r = 123;
+    }
+}
+scope5(); // undefined
+
+function scope6() {
+    if (true) {
+        console.log(r);
+        var r = 123;
+    }
+}
+scope6(); // undefined
+
+function scope7() {
+    if (true) {
+        var r = 123;
+        console.log(r);
+    }
+}
+scope7(); // 123
+
+function scope8() {
+    if (true) {
+        var r = 123;
+    }
+    console.log(r);
+}
+scope8(); // 123
+
+// var 보다 let, const 사용을 권장
+// why?
+// 유효범위가 커서 의도하지 않은 범위에서 변수가 사용될 수도 있고
+// 메모리 누수로 발전할 수 있음 (메모리를 많이 차지)
+
+/* 11. 형 변환 (데이터 타입 변환) */
+
+const s = 1;
+const t = "1";
+
+console.log(s === t); // false
+console.log(s == t); // true   // 형 변환이 일어남
+
+// ==는 형 변환이 일어나기 때문에 === 사용을 권장
+
+// 참으로 취급하는 값
+// true, {}, [], 1, 2, 'false', -12, '3.14' ...
+
+if (true) {
+    console.log(123);
+} // 123
+
+if ("false") {
+    console.log(123);
+} // 123
+
+// 거짓으로 취급하는 값
+// false, '', null, undefined, 0, -0, NaN
+
+if (false) {
+    console.log(123);
+} // 아무것도 출력되지 않음
+
+// (Not a Number) : 숫자 데이터
+
+console.log(1 + undefined); // NaN
+
+// 12. 함수 복습
+
+function sum1(x, y) {
+    console.log(x + y);
+}
+sum1(1, 3); // 4
+sum1(4, 12); // 16
+
+// x, y : 매개 변수
+// 1, 3 : 인수
+
+function sum2(x, y) {
+    console.log(x + y);
+    return x + y;
+}
+const u = sum2(1, 3);
+const v = sum2(4, 12);
+
+console.log(u);
+console.log(v);
+console.log(u + v);
+
+// 변수를 선언하지 않고
+// console.log(sum2(1, 3) + sum2(4, 12))
+// 라고 해도 되지만 더 느림
+// why?
+// 변수를 선언하면 선언할 때만 함수를 호출하면 되지만
+// 변수를 선언하지 않으면 매번 함수를 실행하기 때문에
+// 여러번 함수를 실행하는 것은 비효율적
+
+// 함수 선언 방식 (기명 함수)
+function sum3(x, y) {
+    console.log(x + y);
+}
+
+// 함수 표현 방식 (익명 함수)
+const sum4 = function (x, y) {
+    console.log(x + y);
+};
+
+// return (종료)
+
+function sum5(x, y) {
+    console.log(x);
+    return x + y;
+}
+sum5(1, 3); // 1
+
+function sum6(x, y) {
+    return x + y;
+    console.log(x);
+}
+sum6(1, 3); // 아무것도 출력되지 않음
+// return함으로써 함수가 종료되기 때문에
+
+function sum7(x, y) {
+    if (x < 2) {
+        return;
+    }
+    return x + y;
+}
+console.log(sum7(1, 3)); // undefined
+console.log(sum7(7, 3)); // 10
+
+function sum8(x, y) {
+    if (x < 2) {
+        return 123;
+    }
+    return x + y;
+}
+console.log(sum8(1, 3)); // 123
+
+function sum9() {
+    console.log(arguments);
+    // arguments : 매개 변수 지정 없이도 함수 안에서 언제든 사용 가능
+    // 권장되는 방법은 아니지만 매개 변수가 너무 많아서
+    // 일일이 지정하기가 힘든 경우 사용
+
+    return arguments[0] + arguments[1];
+}
+console.log(sum9(7, 3));
