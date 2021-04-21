@@ -377,3 +377,116 @@ function sum9() {
     return arguments[0] + arguments[1];
 }
 console.log(sum9(7, 3));
+
+/* 13. 화살표 함수 */
+
+// function () {}
+const double1 = function (x) {
+    return x * 2;
+};
+console.log("double: ", double1(7)); // 14
+
+// 축약형 () => {}
+const doubleArrow1 = (x) => x * 2;
+console.log("double: ", doubleArrow1(7)); // 14
+
+// 객체 데이터 축약형 () => ({})
+const doubleArrow2 = (x) => ({ name: "Heropy" });
+console.log("double: ", doubleArrow2(7)); // double:  {name: "Heropy"}
+
+/* 14. 즉시실행함수(IIFE) */
+
+// ;를 안써주면 err
+
+// 즉시실행함수 X
+const w = 7;
+function double2() {
+    console.log(w * 2);
+}
+double2(); // 14
+
+// 즉시실행함수 O
+(function () {
+    console.log(w * 2);
+})(); // 14
+
+// 즉시실행함수 O
+(function () {
+    console.log(w * 2);
+})(); // 14
+
+/* 15. 호이스팅 */
+
+// 함수 선언부가 유효범위 최상단으로 끌어올려지는 현상
+
+// 함수표현 : double3()을 먼저 호출하는 것이 불가능
+
+/* double3(); // err
+
+const double3 = function () {
+    console.log(w * 2);
+}; */
+
+// 함수선언 : double3()을 먼저 호출하는 것이 가능
+
+double4(); // 14
+
+function double4() {
+    console.log(w * 2);
+}
+
+/* 16. 타이머 함수 */
+
+// setTimeout(함수, 시간) : 일정 시간 후 함수 실행
+// setInterval(함수, 시간) : 시간 간격마다 함수 실행
+// clearTimeout() : 설정된 Timeout 함수를 종료
+// clearInterval() : 설정된 Interval 함수를 종료
+
+// setTimeout(함수, 시간)
+const timer1 = setTimeout(() => {
+    console.log("timer1");
+}, 2000); // 새로고침 해보기
+
+// clearTimeout()
+const h1El1 = document.querySelector("h1");
+h1El1.addEventListener("click", () => {
+    clearTimeout(timer1);
+}); // 2초 안에 클릭해야함
+
+// setInterval(함수, 시간)
+const timer2 = setInterval(() => {
+    console.log("timer2");
+}, 4000); // 새로고침 해보기
+
+// clearInterval()
+const h1El2 = document.querySelector("h1");
+h1El2.addEventListener("click", () => {
+    clearInterval(timer2);
+});
+
+/* 콜백 */
+
+// 함수의 인수로 사용되는 함수
+// ex) setTimeout(함수, 시간)
+// setTimeout 함수가 아니더라도 처리하는데 시간이 많이 걸리는 경우에 사용
+
+function timeout1() {
+    setTimeout(() => {
+        console.log("timeout1");
+    }, 4000);
+}
+timeout1();
+console.log("Done1");
+
+// console창에 Done이 먼저 나오고 뒤에 timeout이 나옴
+// timeout이 Done보다 앞에 나오길 원함
+
+function timeout2(cb) {
+    setTimeout(() => {
+        console.log("timeout2");
+        cb();
+    }, 4000);
+}
+timeout2(() => {
+    console.log("Done2");
+});
