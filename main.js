@@ -442,7 +442,7 @@ function double4() {
 // clearTimeout() : 설정된 Timeout 함수를 종료
 // clearInterval() : 설정된 Interval 함수를 종료
 
-// setTimeout(함수, 시간)
+/* // setTimeout(함수, 시간)
 const timer1 = setTimeout(() => {
     console.log("timer1");
 }, 2000); // 새로고침 해보기
@@ -462,9 +462,9 @@ const timer2 = setInterval(() => {
 const h1El2 = document.querySelector("h1");
 h1El2.addEventListener("click", () => {
     clearInterval(timer2);
-});
+}); */
 
-/* 콜백 */
+/* 17. 콜백 함수 */
 
 // 함수의 인수로 사용되는 함수
 // ex) setTimeout(함수, 시간)
@@ -475,7 +475,7 @@ function timeout1() {
         console.log("timeout1");
     }, 4000);
 }
-timeout1();
+/* timeout1(); */
 console.log("Done1");
 
 // console창에 Done이 먼저 나오고 뒤에 timeout이 나옴
@@ -487,6 +487,203 @@ function timeout2(cb) {
         cb();
     }, 4000);
 }
-timeout2(() => {
+/* timeout2(() => {
     console.log("Done2");
-});
+}); */
+
+/* 18. 클래스 - 생성자 함수(prototype), new */
+
+// 생성자 함수를 사용하지 않은 비효율적인 방법
+
+const heropy1 = {
+    firstName: "Heropy", // firstName -> 속성(프로퍼티)
+    lastName: "Park", // lastName -> 속성(프로퍼티)
+    getFullName: function () {
+        return `${this.firstName} ${this.lastName}`;
+    },
+    // getFullName -> 함수 데이터가 할당되어 있기 때문에 속성이 아니고 메소드
+    // this는 heropy를 지칭
+}; // 속성과 메소드를 통틀어 멤버라고 함
+console.log(heropy1); // {firstName: "Heropy", lastName: "Park", getFullName: ƒ}
+console.log(heropy1.getFullName()); // Heropy Park
+
+const amy1 = {
+    firstName: "Amy",
+    lastName: "Clarke",
+    getFullName: function () {
+        return `${this.firstName} ${this.lastName}`;
+    },
+};
+console.log(amy1); // {firstName: "Amy", lastName: "Clarke", getFullName: ƒ}
+console.log(amy1.getFullName()); // Amy Clarke
+
+const neo1 = {
+    firstName: "Neo",
+    lastName: "Smith",
+    getFullName: function () {
+        return `${this.firstName} ${this.lastName}`;
+    },
+};
+console.log(neo1); // {firstName: "Neo", lastName: "Smith", getFullName: ƒ}
+console.log(neo1.getFullName()); // Neo Smith
+
+// 생성자 함수를 사용한 효율적인 방법
+
+function User1(first, last) {
+    this.firstName = first;
+    this.lastName = last;
+} // 생성자 함수의 이름 규칙 : 첫 번째 철자 대문자 (일반 함수와 구분하기 위해)
+User1.prototype.getFullName = function () {
+    return `${this.firstName} ${this.lastName}`;
+}; // prototype : 속성 (User 안의 여러 데이터)
+
+const heropy2 = new User1("Heropy", "Park"); // heropy2 -> 생성자 함수의 인스턴스
+const amy2 = new User1("Amy", "Clarke");
+const neo2 = new User1("Neo", "Smith");
+
+console.log(heropy2); // User1 {firstName: "Heropy", lastName: "Park"}
+console.log(amy2); // User1 {firstName: "Amy", lastName: "Clarke"}
+console.log(neo2); // User1 {firstName: "Neo", lastName: "Smith"}
+
+console.log(heropy2.getFullName()); // Heropy Park
+console.log(amy2.getFullName()); // Amy Clarke
+console.log(neo2.getFullName()); // Neo Smith
+
+// 리터럴 : 특정한 기호만 가지고 데이터를 만드는 것
+// ex) {}, [], ""
+
+// prototype : 속성으로 객체의 데이터들을 가지고 있음
+
+const x = [1, 2, 3];
+
+// includes : 포함하는지
+console.log(x.includes(4)); // false
+console.log(x.includes(2)); // true
+
+/* 19. 클래스 - this */
+
+// 일반(normal) 함수 : 호출 위치에 따라 this 정의
+// 화살표(arrow) 함수 : 자신이 선언된 함수 범위에서 this 정의
+
+const heropy3 = {
+    name: "Heropy",
+    /* normal: function () {
+        console.log(this.name);
+    }, */
+    normal() {
+        console.log(this.name);
+    }, // 클래스 패턴   // 축약형
+    arrow: () => {
+        console.log(this.name);
+    },
+};
+heropy3.normal(); // Heropy   // heropy3 범위 -> heropy3에서 호출했기 때문
+// heropy3.arrow(); // undefined   // 코딩하는 환경에 따라 지칭하는 것이 다름
+
+const amy3 = {
+    name: "Amy",
+    normal: heropy3.normal,
+    arrow: heropy3.arrow,
+};
+amy3.normal(); // Amy   // amy3 범위 -> amy3에서 호출했기 때문
+// amy3.arrow(); // undefined   // heropy3와 같음 -> 선언된 함수 범위는 변하지 않기 때문
+
+// 생성자 함수에 this 적용하기
+
+function User2(name) {
+    this.name = name;
+}
+User2.prototype.normal = function () {
+    console.log(this.name);
+};
+User2.prototype.arrow = () => {
+    console.log(this.name);
+};
+
+const heropy4 = new User2("Heropy");
+
+heropy4.normal(); // Heropy
+// heropy4.arrow(); // undefined   // 선언된 함수가 없어서
+
+const timer3 = {
+    name: "Heropy!!",
+    normalTimeout: function () {
+        // setTimeout(함수, 시간)
+        setTimeout(function () {
+            console.log(this.name);
+        }, 2000);
+    },
+    arrowTimeout: function () {
+        // setTimeout(함수, 시간)
+        setTimeout(() => {
+            console.log(this.name);
+        }, 3000);
+    },
+};
+/* timer3.normalTimeout(); // undefined
+timer3.arrowTimeout(); // Heropy!! */
+
+// setTimeout이나 setInterval같은 타이머 함수를 사용할 경우
+// 콜백 함수로 일반 함수보다 화살표 함수를 쓰는 것이 활용도가 높음
+
+// 언제 일반 함수를 사용하고 언제 화살표 함수를 사용할지 구분할 줄 알아야함
+
+/* 20. 클래스 - ES6 Classes */
+
+// function User3(first, last) {
+//     this.firstName = first;
+//     this.lastName = last;
+// }
+// User3.prototype.getFullName = function () {
+//     return `${this.firstName} ${this.lastName}`;
+// };
+
+// 생성자 함수를 클래스로 구현하기 - 권장하는 방법
+
+class User3 {
+    constructor(first, last) {
+        this.firstName = first;
+        this.lastName = last;
+    } // constructor: function (first, last)의 축약형
+    getFullName() {
+        return `${this.firstName} ${this.lastName}`;
+    } // prototype 사용하지 않고 prototype으로 만들어지는 메소드 정의
+}
+
+const heropy5 = new User3("Heropy", "Park");
+
+console.log(heropy5); // User3 {firstName: "Heropy", lastName: "Park"}
+
+/* 21. 클래스 - 상속(확장) */
+
+class Vehicle {
+    constructor(name, wheel) {
+        this.name = name;
+        this.wheel = wheel;
+    }
+}
+
+class Bicycle extends Vehicle {
+    constructor(name, wheel) {
+        super(name, wheel); // super은 Vehicle을 의미, super가 있는 자리에서 Vehicle이 실행
+    }
+} // extends : 상속(확장)
+
+class Car extends Vehicle {
+    constructor(name, wheel, license) {
+        super(name, wheel);
+        this.license = license; // 추가적인 기능 작성
+    }
+}
+
+const myVehicle = new Vehicle("운송수단", 2);
+const myBicycle = new Bicycle("삼천리", 2);
+const daughtersBicycle = new Bicycle("세발", 3);
+const myCar = new Car("벤츠", 4, true);
+const daughtersCar = new Car("포르쉐", 4, false);
+
+console.log(myVehicle); // Vehicle {name: "운송수단", wheel: 2}
+console.log(myBicycle); // Bicycle {name: "삼천리", wheel: 2}
+console.log(daughtersBicycle); // Bicycle {name: "세발", wheel: 3}
+console.log(myCar); // Car {name: "벤츠", wheel: 4, license: true}
+console.log(daughtersCar); // Car {name: "포르쉐", wheel: 4, license: false}
