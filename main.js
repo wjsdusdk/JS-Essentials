@@ -1,3 +1,5 @@
+/* JavaScript Essentials */
+
 /* 1. 데이터 타입 확인 */
 
 import getType from "./getType";
@@ -687,3 +689,96 @@ console.log(myBicycle); // Bicycle {name: "삼천리", wheel: 2}
 console.log(daughtersBicycle); // Bicycle {name: "세발", wheel: 3}
 console.log(myCar); // Car {name: "벤츠", wheel: 4, license: true}
 console.log(daughtersCar); // Car {name: "포르쉐", wheel: 4, license: false}
+
+/* JavaScript Level up - 데이터 */
+
+/* 1. 문자 */
+
+// String: "", '', ``
+// Number
+// Boolean: true, false
+// undefined
+// null
+// Array: []
+// Object: {}
+
+// String.indexOf() : 몇 번째 문자인지
+
+const indexOf1 = "Hello world!".indexOf("world");
+const indexOf2 = "Hello world!".indexOf("Heropy");
+const indexOf3 = "Hello world!".indexOf("HEROPY") !== -1;
+
+console.log(indexOf1); // 6
+console.log(indexOf2); // -1   // 일치하는 값이 없음
+console.log(indexOf3); // false
+
+// String.length : 문자 수
+
+const length = "01 23".length;
+console.log(length); // 5   // 공백도 문자로 인식
+
+// String.slice() : 문자 자르기
+
+const slice1 = "Hello world!".slice(0, 3); // slice(0부터 시작, 0부터 시작하고 직전까지 추출)
+const slice2 = "Hello world!".slice(6, 11);
+
+console.log(slice1); // Hel
+console.log(slice2); // world
+
+// String.replace() : 문자 바꾸기
+
+const replace1 = "Hello world!".replace("world", "HEROPY");
+const replace2 = "Hello world!".replace(" world!", "");
+
+console.log(replace1); // Hello HEROPY!
+console.log(replace2); // Hello
+
+// String.match() : 배열형식으로 추출
+// 이메일에서 아이디 추출
+
+const email = "thesecon@gmail.com";
+const id = email.match(/.+(?=@)/); // /.+(?=@)/ : 정규표현식
+
+console.log(id); // ["thesecon", index: 0, input: "thesecon@gmail.com", groups: undefined]
+console.log(id[0]); // thesecon
+
+// String.trim() : 맨 앞과 맨 뒤의 공백 제거
+
+const trim = "   Hello   world!   ".trim();
+console.log(trim);
+
+/* 2. 숫자와 수학 */
+
+const pi = 3.14159265358979;
+console.log(pi); // 3.14159265358979
+
+// Number.toFixed() : 반올림
+
+const str = pi.toFixed(2);
+console.log(str); // 3.14
+console.log(typeof str); // string
+
+// 전역함수 : 전체의 영역에서 사용 가능한 함수
+// ex) setTimeout, setInterval, clearTimeout, clearInterval, parseInt, parseFloat
+
+// parseInt(), parseFloat() : 문자데이터를 숫자데이터로 변환
+
+const integer = parseInt(str); // parse : 분석, Int : 정수
+const float = parseFloat(str); // parse : 분석, Float : 소숫점 자리 유지
+console.log(integer); // 3
+console.log(float); // 3.14
+console.log(typeof integer, typeof float); // number number
+
+// Math : 수학적인 상수와 함수를 위핸 속성과 메서드를 가진 자바스크립트에 내장되어있는 내장 객체 (함수 객체 X)
+
+// Math.abs : 절대값
+
+console.log("abs: ", Math.abs(-12)); // 12   // 절대값
+console.log("min: ", Math.min(2, 8)); // 2   // 작은값
+console.log("max: ", Math.max(2, 8)); // 8   // 큰값
+console.log("ceil: ", Math.ceil(3.14)); // 4   // 올림 (기본적으로 정수 단위로 올림)
+console.log("floor: ", Math.floor(3.94)); // 3   // 내림
+console.log("round: ", Math.round(3.14)); // 3   // 반올림
+console.log("round: ", Math.round(3.54)); // 4   // 반올림
+console.log("random: ", Math.random()); // 정수가 0인 랜덤 숫자
+console.log("random: ", Math.floor(Math.random() * 10)); // 0~9 범위의 랜덤 숫자
