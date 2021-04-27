@@ -690,9 +690,9 @@ console.log(daughtersBicycle); // Bicycle {name: "세발", wheel: 3}
 console.log(myCar); // Car {name: "벤츠", wheel: 4, license: true}
 console.log(daughtersCar); // Car {name: "포르쉐", wheel: 4, license: false}
 
-/* JavaScript Level up - 데이터 */
+/* JavaScript Level up */
 
-/* 1. 문자 */
+/* 1. 데이터 - 문자 */
 
 // String: "", '', ``
 // Number
@@ -747,7 +747,7 @@ console.log(id[0]); // thesecon
 const trim = "   Hello   world!   ".trim();
 console.log(trim);
 
-/* 2. 숫자와 수학 */
+/* 2. 데이터 - 숫자와 수학 */
 
 const pi = 3.14159265358979;
 console.log(pi); // 3.14159265358979
@@ -782,3 +782,159 @@ console.log("round: ", Math.round(3.14)); // 3   // 반올림
 console.log("round: ", Math.round(3.54)); // 4   // 반올림
 console.log("random: ", Math.random()); // 정수가 0인 랜덤 숫자
 console.log("random: ", Math.floor(Math.random() * 10)); // 0~9 범위의 랜덤 숫자
+
+/* 3. 데이터 - 배열 */
+
+const numbers = [1, 2, 3, 4]; // 요소 : element, item
+const fruits = ["Apple", "Banana", "Cherry"];
+
+console.log(numbers[1]); // 2
+console.log(fruits[2]); // Cherry
+
+// Array.length : 배열의 요소 갯수
+
+console.log(numbers.length); // 4
+console.log(fruits.length); // 3
+console.log([1, 2].length); // 2
+console.log([].length); // 0
+
+// Array1.concat(Array2) : 배열 데이터를 병합해 새로운 배열 데이터를 반환 (원본 데이터 손상 X)
+
+console.log(numbers.concat(fruits)); // (7) [1, 2, 3, 4, "Apple", "Banana", "Cherry"]
+console.log(numbers); // (4) [1, 2, 3, 4]
+console.log(fruits); // (3) ["Apple", "Banana", "Cherry"]
+
+// Array.forEach(콜백함수) : 배열 데이터의 요소 갯수만큼 콜백함수를 반복적으로 실행 (반환 X)
+
+fruits.forEach(function (element, index, array) {
+    console.log(element, index, array);
+}); // 매개변수의 이름은 마음대로 정하기
+
+// Apple 0 (3) ["Apple", "Banana", "Cherry"]
+// Banana 1 (3) ["Apple", "Banana", "Cherry"]
+// Cherry 2 (3) ["Apple", "Banana", "Cherry"]
+
+// Array.map(콜백함수) : 배열 데이터의 요소 갯수만큼 콜백함수를 반복적으로 실행 (반환 O, 원본 데이터 손상 X)
+
+const map1 = fruits.forEach(function (fruit, index) {
+    console.log(`${fruit}-${index}`);
+}); // 콜백함수 밖으로 반환 X
+
+/* 축약
+fruits.forEach((fruit, index) => {
+    console.log(`${fruit}-${index}`);
+}); */
+
+// Apple-0
+// Banana-1
+// Cherry-2
+
+const map2 = fruits.map(function (fruit, index) {
+    return `${fruit}-${index}`;
+}); // 콜백함수 밖으로 반환 O
+
+const map3 = fruits.map(function (fruit, index) {
+    return {
+        id: index,
+        name: fruit,
+    };
+}); // 콜백함수 밖으로 반환 O
+
+/* 축약
+fruits.map((fruit, index) => ({
+    id: index,
+    name: fruit,
+})); */
+
+console.log(map1); // undefined
+console.log(map2); // (3) ["Apple-0", "Banana-1", "Cherry-2"]
+console.log(map3); // (3) [{…}, {…}, {…}]
+
+// Array.filter() : 필터링된 결과(true)만 반환 (반환 O, 원본 데이터 손상 X)
+
+const filter1 = numbers.map((number) => {
+    return number < 3;
+});
+
+/* 축약
+numbers.map((number) => number < 3); */
+
+const filter2 = numbers.filter((number) => {
+    return number < 3;
+});
+
+/* 축약
+numbers.filter((number) => number < 3); */
+
+console.log(filter1); // (4) [true, true, false, false]
+console.log(filter2); // (2) [1, 2]
+
+// Array.find() : 일치하는 첫 번째 데이터를 찾음
+
+const find = fruits.find((fruit) => {
+    return /^B/.test(fruit);
+});
+
+/* 축약
+const find = fruits.find((fruit) => /^B/.test(fruit)); */
+
+// 정규표현식 /^B/
+// ^ : 시작
+// 대문자 B로 시작하는 문자 데이터
+
+console.log(find); // Banana
+
+// Array.findIndex() : 일치하는 첫 번째 데이터의 index를 찾음
+
+const findIndex = fruits.findIndex((fruit) => {
+    return /^B/.test(fruit);
+});
+
+/* 축약
+const findIndex = fruits.findIndex((fruit) => /^B/.test(fruit)); */
+
+// 정규표현식 /^B/
+// ^ : 시작
+// 대문자 B로 시작하는 문자 데이터
+
+console.log(findIndex); // 1
+
+// Array.includes() : 포함 여부
+
+const includes1 = numbers.includes(3);
+const includes2 = fruits.includes("HEROPY");
+
+console.log(includes1); // true
+console.log(includes2); // false
+
+// Array.push() : 배열의 맨 뒤에 요소 추가 (원본 데이터 수정됨)
+
+numbers.push(5);
+console.log(numbers); // (5) [1, 2, 3, 4, 5]
+
+// Array.unshift() : 배열의 맨 앞에 요소 추가 (원본 데이터 수정됨)
+
+numbers.unshift(0);
+console.log(numbers); // (6) [0, 1, 2, 3, 4, 5]
+
+// Array.reverse() : 배열의 순서를 거꾸로 바꿈 (원본 데이터 수정됨)
+
+numbers.reverse();
+fruits.reverse();
+
+console.log(numbers); // (6) [5, 4, 3, 2, 1, 0]
+console.log(fruits); // (3) ["Cherry", "Banana", "Apple"]
+
+// Array.splice() : 배열의 요소 제거 & 추가 (원본 데이터 수정됨)
+
+numbers.splice(2, 1); // splice(index, 갯수)
+console.log(numbers); // (5) [5, 4, 2, 1, 0]
+
+numbers.splice(2, 0);
+console.log(numbers); // (5) [5, 4, 2, 1, 0]   // 변화없음
+
+numbers.splice(2, 0, 999); // splice(index, 갯수, 추가할 데이터)
+console.log(numbers); // (6) [5, 4, 999, 2, 1, 0]
+
+numbers.splice(2, 2, 88); // splice(index, 갯수, 추가할 데이터)
+console.log(numbers); // (5) [5, 4, 88, 1, 0]
