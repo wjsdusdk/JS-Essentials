@@ -1026,7 +1026,7 @@ console.log(values2); // (3) ["Heropy", 85, "thesecon@gmail.com"]
 
 // 객체 데이터에 구조 분해 할당 - key명대로 할당
 
-const person = {
+const user4 = {
     name: "Heropy",
     age: 85,
     mail: "thesecon@gmail.com",
@@ -1034,7 +1034,7 @@ const person = {
 };
 
 // 구조 분해 할당을 통해 각각의 변수로 만듬
-const { name = "Mina", age, mail, address, birth = 991212, number: phone } = person;
+const { name = "Mina", age, mail, address, birth = 991212, number: phone } = user4;
 const year = age;
 
 console.log(`사용자의 이름은 ${name}입니다.`); // 사용자의 이름은 Heropy입니다.   // 덮어쓰기 X
@@ -1047,7 +1047,7 @@ console.log(`${name}의 나이는 ${year}세입니다.`); // Heropy의 나이는
 console.log(`${name}의 전화번호는 ${phone}입니다.`); // Heropy의 전화번호는 010-1234-5678입니다.
 
 // 구조 분해 할당하지 않고 하는 방법 2가지
-console.log(`${person.name}의 나이는 ${person["age"]}세입니다.`); // Heropy의 나이는 85세입니다.
+console.log(`${user4.name}의 나이는 ${user4["age"]}세입니다.`); // Heropy의 나이는 85세입니다.
 
 // 배열 데이터에 구조 분해 할당 - 순서대로 할당
 
@@ -1094,3 +1094,90 @@ function toObject2(a, b, ...c) {
 const toObject2 = (a, b, ...c) => ({ a, b, c }); */
 
 console.log(toObject2(...fruits2)); // {a: "Apple", b: "Banana", c: Array(2)}
+
+/* 7. 데이터 - 데이터 불변성 */
+
+// 원시형 데이터 : 다르게 생기면 다른 데이터
+// ex) String, Number, Boolean, undefined, null
+
+let ff = 1;
+let gg = 4;
+console.log(ff, gg, ff === gg); // 1 4 false
+
+gg = ff;
+console.log(ff, gg, ff === gg); // 1 1 true
+
+ff = 7;
+console.log(ff, gg, ff === gg); // 7 1 false   // 함께 바뀌지 않음
+
+let hh = 1;
+console.log(gg, hh, gg === hh); // 1 1 true   // 원시 데이터(1)가 이미 있다면 새로 만들지 않고 기존 데이터 참조
+
+// 참조형 데이터 : 메모리 주소를 참조하는 데이터 (똑같이 생겨도 다른 데이터일 수 있음)
+// ex) Object {}, Array [], Function 함수
+
+let ii = { k: 1 };
+let jj = { k: 1 };
+console.log(ii, jj, ii === jj); // {k: 1} {k: 1} false
+
+ii.k = 7;
+jj = ii;
+console.log(ii, jj, ii === jj); // {k: 7} {k: 7} true
+
+ii.k = 2;
+console.log(ii, jj, ii === jj); // {k: 2} {k: 2} true   // 같은 메모리 주소를 참조하기 때문에 함께 바뀜
+
+let kk = jj;
+console.log(ii, jj, kk, ii === kk); // {k: 2} {k: 2} {k: 2} true   // 같은 메모리 주소를 참조하기 때문에 함께 바뀜
+
+ii.k = 9;
+console.log(ii, jj, kk, ii === kk); // {k: 9} {k: 9} {k: 9} true   // 같은 메모리 주소를 참조하기 때문에 함께 바뀜
+
+// 참조형 데이터의 경우 하나를 수정하면 다른 것들도 의도치 않게 수정될 수 있기 때문에 조심해야함
+
+// 8. 데이터 - 얕은 복사 & 깊은 복사
+
+// 얕은 복사 - 표면만 복사
+
+// 깊은 복사 - 내부까지 복사
+// 순수 자바스크립트로 직접적으로 구현하긴 복잡해서 lodash 사용
+// js-test> npm i lodash
+
+import _ from "lodash"; // _ : 객체 데이터
+
+const user5 = {
+    name: "Heropy",
+    age: 85,
+    emails: ["thesecon@gmail.com"],
+};
+const copyUser1 = user5;
+const copyUser2 = Object.assign({}, user5); // 얕은 복사 방법 1
+const copyUser3 = { ...user5 }; // 얕은 복사 방법 2
+
+const copyUser4 = _.cloneDeep(user5); // 깊은 복사 방법
+
+console.log(copyUser1 === user5); // true
+console.log(copyUser2 === user5); // false
+console.log(copyUser3 === user5); // false
+
+console.log(copyUser4 === user5); // false
+
+user5.age = 22;
+console.log("user5", user5); // {name: "Heropy", age: 22, emails: Array(1)}
+console.log("copyUser1", copyUser1); // copyUser1 {name: "Heropy", age: 22, emails: Array(1)}
+console.log("copyUser2", copyUser2); // copyUser2 {name: "Heropy", age: 85, emails: Array(1)}
+console.log("copyUser3", copyUser3); // copyUser3 {name: "Heropy", age: 85, emails: Array(1)}
+
+console.log("copyUser4", copyUser4); // copyUser4 {name: "Heropy", age: 85, emails: Array(1)}
+
+user5.emails.push("neo@zillinks.com");
+console.log("user5", user5); // user5 {name: "Heropy", age: 22, emails: Array(2)}
+console.log("copyUser3", copyUser3); // copyUser3 {name: "Heropy", age: 22, emails: Array(2)}
+console.log(user5.emails === copyUser3.emails); // true
+// 배열 데이터도 참조형 데이터
+// user5만 복사하고 emails는 따로 복사하지 않아서 같은 메모리 주소를 참조 (얕은 복사)
+
+console.log("copyUser4", copyUser4); // copyUser4 {name: "Heropy", age: 85, emails: Array(1)}
+console.log(user5.emails === copyUser4.emails); // false
+
+// 참조형 데이터 안에 참조형 데이터가 있는 경우는 깊은 복사하는 것이 좋음

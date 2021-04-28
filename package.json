@@ -9,5 +9,9 @@
     },
     "keywords": [],
     "author": "",
-    "license": "ISC"
+    "license": "ISC",
+    "dependencies": {
+        "lo": "^0.41.0",
+        "lodash": "^4.17.21"
+    }
 }
