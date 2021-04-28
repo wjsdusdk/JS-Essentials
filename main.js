@@ -393,6 +393,7 @@ const doubleArrow1 = (x) => x * 2;
 console.log("double: ", doubleArrow1(7)); // 14
 
 // 객체 데이터 축약형 () => ({})
+// 화살표 함수에서 {}는 함수의 범위를 나타내므로 () 안에서 객체 데이터를 정의해줘야지만 함수 밖으로 반환
 const doubleArrow2 = (x) => ({ name: "Heropy" });
 console.log("double: ", doubleArrow2(7)); // double:  {name: "Heropy"}
 
@@ -869,7 +870,7 @@ numbers.filter((number) => number < 3); */
 console.log(filter1); // (4) [true, true, false, false]
 console.log(filter2); // (2) [1, 2]
 
-// Array.find() : 일치하는 첫 번째 데이터를 찾음
+// Array.find() : 조건을 만족하는 첫 번째 요소의 값을 반환 (없다면 undefined)
 
 const find = fruits.find((fruit) => {
     return /^B/.test(fruit);
@@ -938,3 +939,158 @@ console.log(numbers); // (6) [5, 4, 999, 2, 1, 0]
 
 numbers.splice(2, 2, 88); // splice(index, 갯수, 추가할 데이터)
 console.log(numbers); // (5) [5, 4, 88, 1, 0]
+
+/* 4. 데이터 - 객체 */
+
+// Object.assign(대상 객체, 출처 객체)
+// : 하나 이상의 출처 객체로부터 대상 객체로 속성을 복사해서 대상 객체 반환
+
+// 참조형 데이터 : 메모리 주소를 참조하는 데이터
+// ex) 객체 데이터 {}, 배열 데이터 [], 함수 function
+
+// 원시형 데이터
+// ex) 문자, 숫자, boolean, null, undefined
+
+const userAge1 = {
+    // Key: value,
+    name: "Heropy",
+    age: 85,
+};
+
+const userEmail1 = {
+    name: "Heropy",
+    email: "thesecon@gmail.com",
+};
+
+const userName = {
+    name: "Mina",
+};
+
+const target1 = Object.assign(userAge1, userEmail1);
+const y = { k: 123 };
+const z = { k: 123 };
+
+console.log(target1); // {name: "Heropy", age: 85, email: "thesecon@gmail.com"}
+console.log(userAge1); // {name: "Heropy", age: 85, email: "thesecon@gmail.com"}
+console.log(target1 === userAge1); // true   // 메모리 주소가 같음
+console.log(y === z); // false   // 메모리 주소가 다름
+
+const target0 = Object.assign(userAge1, userName); // key가 같을 경우 덮어쓰기
+console.log(target0); // {name: "Mina", age: 85, email: "thesecon@gmail.com"}
+
+const userAge2 = {
+    // Key: value,
+    name: "Heropy",
+    age: 85,
+};
+
+const userEmail2 = {
+    name: "Heropy",
+    email: "thesecon@gmail.com",
+};
+
+// 원본 손상시키지 않고 새로운 객체 데이터 생성
+const target2 = Object.assign({}, userAge2, userEmail2); // 출처 객체의 수는 마음대로
+const target3 = Object.assign({}, userAge2);
+
+console.log(target2); // {name: "Heropy", age: 85, email: "thesecon@gmail.com"}
+console.log(userAge2); // {name: "Heropy", age: 85}
+console.log(target2 === userAge2); // false
+
+console.log(target3); // {name: "Heropy", age: 85}
+console.log(target3 === userAge2); // false   // 메모리 주소가 다름
+
+// Object.keys()
+
+const user1 = {
+    name: "Heropy",
+    age: 85,
+    email: "thesecon@gmail.com",
+};
+
+const keys = Object.keys(user1);
+
+console.log(keys); // (3) ["name", "age", "email"]   // key들을 배열로 만듬
+console.log(user1.email); // thesecon@gmail.com
+console.log(user1["email"]); // thesecon@gmail.com   // 아래처럼 사용할 경우 사용
+
+const values1 = keys.map((key) => user1.key);
+const values2 = keys.map((key) => user1[key]); // return 생략한 축약형
+
+console.log(values1); // (3) [undefined, undefined, undefined]   // 정상적인 동작 X
+console.log(values2); // (3) ["Heropy", 85, "thesecon@gmail.com"]
+
+/* 5. 데이터 - 구조 분해 할당 */
+
+// 비구조화 할당
+
+// 객체 데이터에 구조 분해 할당 - key명대로 할당
+
+const person = {
+    name: "Heropy",
+    age: 85,
+    mail: "thesecon@gmail.com",
+    number: "010-1234-5678",
+};
+
+// 구조 분해 할당을 통해 각각의 변수로 만듬
+const { name = "Mina", age, mail, address, birth = 991212, number: phone } = person;
+const year = age;
+
+console.log(`사용자의 이름은 ${name}입니다.`); // 사용자의 이름은 Heropy입니다.   // 덮어쓰기 X
+console.log(`${name}의 나이는 ${age}세입니다.`); // Heropy의 나이는 85세입니다.
+console.log(`${name}의 이메일 주소는 ${mail}입니다.`); // Heropy의 이메일 주소는 thesecon@gmail.com입니다.
+console.log(address); // undefined
+console.log(`${name}의 생년월일은 ${birth}입니다.`); // Heropy의 생년월일은 991212입니다.
+console.log(`${name}의 나이는 ${year}세입니다.`); // Heropy의 나이는 85세입니다.
+/* console.log(`${name}의 전화번호는 ${number}입니다.`); // err   // 바로 윗줄과의 차이 */
+console.log(`${name}의 전화번호는 ${phone}입니다.`); // Heropy의 전화번호는 010-1234-5678입니다.
+
+// 구조 분해 할당하지 않고 하는 방법 2가지
+console.log(`${person.name}의 나이는 ${person["age"]}세입니다.`); // Heropy의 나이는 85세입니다.
+
+// 배열 데이터에 구조 분해 할당 - 순서대로 할당
+
+const fruits1 = ["Apple", "Banana", "Cherry"];
+const [aa, bb, cc, dd] = fruits1;
+
+const colors = ["red", "orange", "yellow"];
+const [, , ee] = colors;
+
+console.log(aa, bb, cc, dd); // Apple Banana Cherry undefined
+console.log(ee); // yellow
+
+/* 6. 데이터 - 전개 연산자 (...) */
+
+const fruits2 = ["Apple", "Banana", "Cherry", "Orange"];
+
+console.log(fruits2); // (4) ["Apple", "Banana", "Cherry", "Orange"]
+console.log(...fruits2); // Apple Banana Cherry Orange   // 배열 데이터를 문자 데이터로 변환
+console.log("Apple", "Banana", "Cherry", "Orange"); // Apple Banana Cherry Orange
+
+// 객체 데이터로 변환해주는 함수
+
+function toObject1(a, b, c) {
+    return {
+        A: a,
+        B: b,
+        C: c,
+    };
+}
+
+console.log(toObject1(...fruits2)); // {A: "Apple", B: "Banana", C: "Cherry"}
+console.log(toObject1(fruits2)); // {A: Array(4), B: undefined, C: undefined}   // 정상적인 동작 X
+console.log(toObject1(fruits2[0], fruits2[1], fruits2[2])); // {A: "Apple", B: "Banana", C: "Cherry"}
+
+function toObject2(a, b, ...c) {
+    return {
+        a: a, // key = value일 경우 축약 가능
+        b: b,
+        c: c,
+    };
+} // ...c : 나머지
+
+/* 축약형
+const toObject2 = (a, b, ...c) => ({ a, b, c }); */
+
+console.log(toObject2(...fruits2)); // {a: "Apple", b: "Banana", c: Array(2)}
