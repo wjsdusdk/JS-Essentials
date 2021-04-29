@@ -130,7 +130,8 @@ console.log(o ? "참" : "거짓"); // 참
 
 /* 7. 조건문 if else */
 
-import random from "./getRandom"; // random 자리의 이름은 마음대로 정하기
+import random from "./getRandom";
+// random 자리의 이름은 마음대로 정하기
 
 console.log(random());
 
@@ -1143,7 +1144,9 @@ console.log(ii, jj, kk, ii === kk); // {k: 9} {k: 9} {k: 9} true   // 같은 메
 // 순수 자바스크립트로 직접적으로 구현하긴 복잡해서 lodash 사용
 // js-test> npm i lodash
 
-import _ from "lodash"; // _ : 객체 데이터
+import _ from "lodash";
+// ./를 안적으면 node_modules에서 파일을 찾음
+// _ : 객체 데이터
 
 const user5 = {
     name: "Heropy",
@@ -1181,3 +1184,88 @@ console.log("copyUser4", copyUser4); // copyUser4 {name: "Heropy", age: 85, emai
 console.log(user5.emails === copyUser4.emails); // false
 
 // 참조형 데이터 안에 참조형 데이터가 있는 경우는 깊은 복사하는 것이 좋음
+
+/* 9. 데이터 실습 - 가져오기 & 내보내기 */
+
+// export default
+
+import checkType from "./exportDefault"; // checkType 자리에 아무 이름 사용 가능
+console.log(checkType([1, 2, 3])); // Array
+
+// export
+
+/* import { randomNumber } from "./export"
+console.log(randomNumber(), randomNumber()); // 0 4 */
+
+/* import { randomNumber, person1 } from "./export";
+console.log(person1); // {name: "Heropy", age: 85} */
+
+/* import { randomNumber, person1, person2 as person2heropy } from "./export";
+// console.log(person2); // err
+console.log(person2heropy); // {name: "Amy", age: 40}
+// person2라는 이름으로 데이터를 가져오지만 person2heropy라는 이름으로 활용
+// 객체 구조 분해의 { number: phone }와 같은 기능 */
+
+// 모든 export 데이터 가져오기
+import * as R from "./export";
+// R 자리에 아무 이름 사용 가능
+// * (와일드카드) : 여러 내용을 한꺼번에 지정할 목적으로 사용
+console.log(R); // {person1: {…}, person2: {…}, default: 123, __esModule: true, randomNumber: ƒ}
+
+/* 10. 데이터 실습 - Lodash */
+
+// import _ from "lodash"; // 상단에 이미 적었기 때문에 주석 처리
+
+// _.uniq(array) : 배열 데이터의 중복 요소를 고유하게 바꿈
+
+console.log(_.uniq([2, 1, 2])); // (2) [2, 1]
+
+// _.uniqBy(array, 속성)
+// 배열 데이터의 중복을 구분할 속성을 기준으로 중복 요소를 고유하게 바꿈
+// 이미 중복이 있는 경우 사용 (배열 데이터가 하나일 경우 사용)
+
+const usersA = [
+    { userId: "1", name: "HEROPY" },
+    { userId: "2", name: "Neo" },
+];
+
+const usersB = [
+    { userId: "1", name: "HEROPY" },
+    { userId: "3", name: "Amy" },
+];
+
+const usersC = usersA.concat(usersB); // 배열 데이터를 병합해 새로운 배열 데이터를 반환 (원본 데이터 손상 X)
+console.log("concat", usersC); // concat (4) [{…}, {…}, {…}, {…}]
+
+const usersD = _.uniqBy(usersC, "userId");
+console.log("uniqBy", usersD); // uniqBy (3) [{…}, {…}, {…}]
+
+// _.unionBy(array1, array2, 속성)
+// 배열 데이터의 중복을 구분할 속성을 기준으로 중복 요소를 고유하게 병합
+// 중복이 발생할 수 있는 여러 배열 데이터들을 병합하기 전에 사용 (배열 데이터가 여러개일 경우 사용)
+
+const usersE = _.unionBy(usersA, usersB, "userId");
+console.log("uniqBy", usersE); // uniqBy (3) [{…}, {…}, {…}]
+
+// _.find(array, 속성) : 배열 데이터에서 기준 속성이 포함된 객체 데이터 반환
+
+const users = [
+    { userId: "1", name: "HEROPY" },
+    { userId: "2", name: "Neo" },
+    { userId: "3", name: "Amy" },
+    { userId: "4", name: "Evan" },
+    { userId: "5", name: "Lewis" },
+];
+
+const foundUser = _.find(users, { name: "Amy" });
+console.log(foundUser); // {userId: "3", name: "Amy"}
+
+// _.foundUserIndex(array, 속성) : 배열 데이터에서 기준 속성이 포함된 객체 데이터의 index 반환
+
+const foundUserIndex = _.findIndex(users, { name: "Amy" });
+console.log(foundUserIndex); // 2
+
+// _.remove(array, 속성) : 배열 데이터에서 기준 속성이 포함된 객체 데이터를 제거
+
+_.remove(users, { name: "HEROPY" });
+console.log(users); // (4) [{…}, {…}, {…}, {…}]
