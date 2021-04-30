@@ -1269,3 +1269,104 @@ console.log(foundUserIndex); // 2
 
 _.remove(users, { name: "HEROPY" });
 console.log(users); // (4) [{…}, {…}, {…}, {…}]
+
+/* 11. 데이터 실습 - JSON */
+
+// 자바스크립트의 객체 표기법
+
+const user6 = {
+    name: "Heropy",
+    age: 85,
+    "e-mail": ["thesecon@gmail.com", "neo@zillinks.com"], // 특수 문자를 사용할 경우 "" 사용
+};
+
+console.log("user6", user6); // user6 {name: "Heropy", age: 85, e-mail: Array(2)}
+
+// myData.json
+
+// 123
+// false
+
+// 하나의 .json파일은 하나의 데이터이기 때문에
+// Number 데이터와 Boolean 데이터를 함께 쓸 수 없음
+// 둘 중 하나만 쓸 수 있음
+
+/* {
+    "string": "HEROPY",
+    "number": 123,
+    "boolean": true,
+    "null": null,
+    "object": {},
+    "array": [],
+    // "undefined": undefined // 사용 불가
+} */
+
+import myData from "./myData.json"; // .js파일만 확장자 생략 가능
+
+// .json 파일은 문자 데이터지만 변환되서 객체 데이터로 출력
+console.log(myData); // {string: "HEROPY", number: 123, boolean: true, null: null, object: {…}, …}
+
+// JSON.stringify() : 자바스크립트의 데이터를 .json 포맷인 문자 데이터로 변환 (JSON : 전역 객체)
+
+const str2 = JSON.stringify(user6);
+console.log("str2", str2); // str2 {"name":"Heropy","age":85,"e-mail":["thesecon@gmail.com","neo@zillinks.com"]}
+console.log(typeof str2); // string
+
+// JSON.stringify() : .json 포맷인 문자 데이터를 자바스크립트의 실제 데이터로 변환 (JSON : 전역 객체)
+
+const obj = JSON.parse(str2);
+console.log("obj", obj); // obj {name: "Heropy", age: 85, e-mail: Array(2)}
+console.log(typeof obj); // object
+
+// 12. Storage
+
+// Application (Console과 같은 라인에 있음) -> Local Storage -> http://localhost:1234
+// 브라우저에서 관리되는 저장소
+// 도메인 주소(사이트)에 종속되어 저장
+// 데이터를 임의로 지우지 않는 이상 지워지지 않고 반영구적으로 사용
+
+// Application (Console과 같은 라인에 있음) -> Session Storage -> http://localhost:1234
+// 브라우저에서 관리되는 저장소
+// 페이지 세션이 끝날 때(페이지를 닫을 때) 데이터 사라짐
+
+// Storage에 데이터를 저장하는 방법
+// 문자 데이터로 저장하는 것을 권장
+// Storage.setItem(Key, Value)
+/* 
+localStorage.setItem("user6", user6); // [object Object]
+
+// 문자 데이터로 변환
+localStorage.setItem("user6", JSON.stringify(user6));
+// {"name":"Heropy","age":85,"e-mail":["thesecon@gmail.com","neo@zillinks.com"]}
+
+// 자바스크립트의 실제 데이터로 변환
+console.log(JSON.parse(localStorage.getItem("user6")));
+// {name: "Heropy", age: 85, e-mail: Array(2)}
+
+// 특정 데이터를 읽어오는 용도로만 사용할 경우
+// Storage.getItem(Key)
+
+console.log(localStorage.getItem("user6"));
+// {"name":"Heropy","age":85,"e-mail":["thesecon@gmail.com","neo@zillinks.com"]}
+
+// 데이터를 제거하는 방법
+// Storage.removeItem(Key)
+
+// localStorage.removeItem("user6");
+// Application (Console과 같은 라인에 있음) -> Local Storage -> http://localhost:1234
+// 에서 제거됐는지 확인하기
+
+// 주석처리함으로써 데이터가 지워져도 데이터를 제거하지 않은 이상 Local Storage에 남아있는지 확인하기 */
+
+// age 85를 22로 변경해보기
+
+const str3 = localStorage.getItem("user6");
+const obj2 = JSON.parse(str3);
+console.log(obj2); // {name: "Heropy", age: 85, e-mail: Array(2)}
+
+obj2.age = 22;
+console.log(obj2); // {name: "Heropy", age: 22, e-mail: Array(2)}
+
+localStorage.setItem("user6", JSON.stringify(obj2));
+
+// lodash의 Lowdb를 이용하면 손쉽게 가능
