@@ -1318,7 +1318,7 @@ const obj = JSON.parse(str2);
 console.log("obj", obj); // obj {name: "Heropy", age: 85, e-mail: Array(2)}
 console.log(typeof obj); // object
 
-// 12. Storage
+// 12. 데이터 실습 - Storage
 
 // Application (Console과 같은 라인에 있음) -> Local Storage -> http://localhost:1234
 // 브라우저에서 관리되는 저장소
@@ -1370,3 +1370,25 @@ console.log(obj2); // {name: "Heropy", age: 22, e-mail: Array(2)}
 localStorage.setItem("user6", JSON.stringify(obj2));
 
 // lodash의 Lowdb를 이용하면 손쉽게 가능
+
+/* 13. 데이터 실습 - OMDb API */
+
+// 주소 검색창에 http://www.omdbapi.com/?apikey=7035c60c&s=frozen (frozen->영화제목) 쳐보기
+// 웹 페이지 자체에 뜨기 때문에 main.js에서 활용할 수 없음
+
+// axios을 이용해 main.js에서 활용할 수 있게 하기
+// axios : HTTP 요청을 처리해주는 자바스크립트 패키지
+// js-test> npm i axios
+
+import axios from "axios";
+
+function fetchMovies() {
+    axios.get("https://www.omdbapi.com/?apikey=7035c60c&s=frozen").then((res) => {
+        console.log(res); // res : response, result의 약어
+        const h1El = document.querySelector('h2')
+        const imgEl = document.querySelector('img')
+        h1El.textContent = res.data.Search[0].Title
+        imgEl.src = res.data.Search[0].Poster
+    });
+} // http보다 https를 권장
+fetchMovies(); // {data: {…}, status: 200, statusText: "", headers: {…}, config: {…}, …}
